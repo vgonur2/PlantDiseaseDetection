@@ -1,4 +1,4 @@
-# 🌿 LeafGuard — AI-Powered Plant Disease Detection
+# 🌿 Plant Disease Detection — AI-Powered Plant Disease Detection
 
 **Live Demo:** [(https://plant-disease-detection.vercel.app)  ](https://plant-disease-detection-ck6gb238t.vercel.app/)
 
