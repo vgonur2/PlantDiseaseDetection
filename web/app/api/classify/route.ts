@@ -22,7 +22,7 @@ async function getTreatmentAdvice(plant: string, condition: string): Promise<str
     : `A farmer has a ${plant} plant diagnosed with ${condition}. What should they do?`;
 
   const completion = await client.chat.completions.create({
-    model: "llama3-8b-8192",
+    model: "llama3-70b-8192",
     temperature: 0.3,
     messages: [
       {
