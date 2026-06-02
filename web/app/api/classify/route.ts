@@ -1,8 +1,5 @@
-import { constants } from "fs";
-import { access, mkdir, writeFile } from "fs/promises";
-import path from "path";
 import Groq from "groq-sdk";
-import * as ort from "onnxruntime-node";
+import * as ort from "onnxruntime-web";
 import { NextResponse } from "next/server";
 import sharp from "sharp";
 import { parseLabel } from "@/lib/labels";
@@ -15,16 +12,14 @@ const MODEL_URL =
 const LABELS_URL =
   "https://huggingface.co/vgonur2/PlantDiseaseDetection/resolve/main/labels.json";
 
-const CACHE_DIR = path.join(process.cwd(), ".cache");
-const MODEL_PATH = path.join(CACHE_DIR, "plant_model_v2.onnx");
-
 const MEAN = [0.485, 0.456, 0.406] as const;
 const STD = [0.229, 0.224, 0.225] as const;
 const IMAGE_SIZE = 224;
 
 let sessionPromise: Promise<ort.InferenceSession> | null = null;
 let labelsPromise: Promise<Record<number, string>> | null = null;
-let modelDownloadPromise: Promise<void> | null = null;
+let modelBytesPromise: Promise<ArrayBuffer> | null = null;
+let modelBytesCache: ArrayBuffer | null = null;
 let groqClient: Groq | null = null;
 
 function getGroqClient(): Groq | null {
@@ -38,45 +33,30 @@ function getGroqClient(): Groq | null {
   return groqClient;
 }
 
-async function fileExists(filePath: string): Promise<boolean> {
-  try {
-    await access(filePath, constants.F_OK);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-async function downloadFile(url: string, dest: string): Promise<void> {
-  const response = await fetch(url);
+async function downloadModelBytes(): Promise<ArrayBuffer> {
+  const response = await fetch(MODEL_URL);
   if (!response.ok) {
-    throw new Error(`Failed to download ${url} (${response.status})`);
+    throw new Error(`Failed to download ${MODEL_URL} (${response.status})`);
   }
-  const buffer = Buffer.from(await response.arrayBuffer());
-  await mkdir(path.dirname(dest), { recursive: true });
-  await writeFile(dest, buffer);
+  return await response.arrayBuffer();
 }
 
-async function ensureModelCached(): Promise<string> {
-  if (await fileExists(MODEL_PATH)) {
-    return MODEL_PATH;
-  }
-
-  if (!modelDownloadPromise) {
-    modelDownloadPromise = downloadFile(MODEL_URL, MODEL_PATH).finally(() => {
-      modelDownloadPromise = null;
+async function ensureModelBytes(): Promise<ArrayBuffer> {
+  if (modelBytesCache) return modelBytesCache;
+  if (!modelBytesPromise) {
+    modelBytesPromise = downloadModelBytes().finally(() => {
+      modelBytesPromise = null;
     });
   }
-
-  await modelDownloadPromise;
-  return MODEL_PATH;
+  modelBytesCache = await modelBytesPromise;
+  return modelBytesCache;
 }
 
 async function getSession(): Promise<ort.InferenceSession> {
   if (!sessionPromise) {
     sessionPromise = (async () => {
-      const modelPath = await ensureModelCached();
-      return ort.InferenceSession.create(modelPath);
+      const modelBytes = await ensureModelBytes();
+      return ort.InferenceSession.create(modelBytes);
     })();
   }
   return sessionPromise;
@@ -226,8 +206,6 @@ export async function POST(request: Request) {
       condition: disease,
       confidence,
       treatment,
-      label,
-      classIndex,
     });
   } catch (error) {
     console.error("Classification error:", error);
