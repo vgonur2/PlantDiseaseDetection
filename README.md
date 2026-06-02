@@ -1,6 +1,6 @@
 # 🌿 Plant Disease Detection — AI-Powered Plant Disease Detection
 
-**Live Demo:** [(https://plant-disease-detection.vercel.app)  ]((https://plant-disease-detection-j88fd7q5g.vercel.app/))
+**Live Demo:** [(https://plant-disease-detection.vercel.app)  ](https://plant-disease-detection-j88fd7q5g.vercel.app/)
 
 **Model Repo:** [huggingface.co/vgonur2/PlantDiseaseDetection](https://huggingface.co/vgonur2/PlantDiseaseDetection)
 
