@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LeafGuard — Plant Disease Detection",
+  title: "Plant Disease Detection",
   description:
     "Upload a leaf photo to identify plant species, detect diseases, and get treatment recommendations.",
 };

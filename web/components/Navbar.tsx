@@ -27,7 +27,7 @@ export default function Navbar() {
           </svg>
         </div>
         <span className="text-xl font-semibold tracking-tight text-leaf-900">
-          LeafGuard
+          Plant Disease Detection
         </span>
       </div>
     </header>

@@ -150,7 +150,7 @@ export default function Home() {
       </main>
 
       <footer className="border-t border-leaf-200/60 py-6 text-center text-sm text-earth-500">
-        LeafGuard · PlantVillage · 38 disease classes
+        Plant Disease Detection · PlantVillage · 38 disease classes
       </footer>
     </div>
   );

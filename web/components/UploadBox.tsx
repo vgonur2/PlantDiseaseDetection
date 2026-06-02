@@ -132,6 +132,9 @@ export default function UploadBox({ onFileSelect, disabled = false }: UploadBoxP
           </div>
         )}
       </div>
+      <p className="mt-3 text-center text-sm text-earth-600">
+        for best results please take a picture of a leaf on a grey background with ample lighting
+      </p>
     </div>
   );
 }
