@@ -1,6 +1,6 @@
 # 🌿 LeafGuard — AI-Powered Plant Disease Detection
 
-**Live Demo:** [[plant-disease-detection.vercel.app](https://plant-disease-detection.vercel.app)  ](https://plant-disease-detection-ck6gb238t.vercel.app/)
+**Live Demo:** [(https://plant-disease-detection.vercel.app)  ](https://plant-disease-detection-ck6gb238t.vercel.app/)
 **Model Repo:** [huggingface.co/vgonur2/PlantDiseaseDetection](https://huggingface.co/vgonur2/PlantDiseaseDetection)
 
 LeafGuard is a full-stack machine learning web app that lets farmers and gardeners upload a photo of a plant leaf and instantly get back:
